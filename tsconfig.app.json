@@ -1,0 +1,32 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "rootDir": "./",
+    "outDir": "./build",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./assets/*"],
+    },
+      /**
+     * Typecheck JS in `.svelte` and `.js` files by default.
+     * Disable checkJs if you'd like to use dynamic types in JS.
+     * Note that setting allowJs false does not prevent the use
+     * of JS in `.svelte` files.
+     */
+     "allowJs": true,
+     "checkJs": true,
+     "moduleDetection": "force",
+    "types": ["svelte", "vite/client"],
+    "strictPropertyInitialization": false,
+
+
+  },
+
+
+  "include": ["assets/**/*.ts", "assets/**/*.js", "assets/**/*.svelte"],
+  "exclude": [ "node_modules", "build"]
+}

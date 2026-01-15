@@ -10,11 +10,7 @@
 import SearchesController from '#controllers/searches_controller'
 import router from '@adonisjs/core/services/router'
 
-router.get('/', async () => {
-  return {
-    hello: 'world',
-  }
-})
+router.on('/').renderInertia('home')
 
 router.patch('/search', [SearchesController]).as('search')
 
