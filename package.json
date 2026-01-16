@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",
-    "dev": "bun ace serve --hmr",
+    "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -70,6 +70,7 @@
     "@adonisjs/inertia": "^3.1.1",
     "@adonisjs/lucid": "^21.6.1",
     "@adonisjs/session": "^7.6.0",
+    "@adonisjs/static": "^1.1.1",
     "@inertiajs/svelte": "^2.3.10",
     "@tailwindcss/vite": "^4.1.18",
     "@vinejs/vine": "^3.0.1",
