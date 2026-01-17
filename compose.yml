@@ -20,8 +20,20 @@ services:
       - ./typesense-data-search_layer:/data
     command: "--data-dir /data --api-key=typesense_apikey_search --enable-cors"
 
+  meilisearch:
+    image: getmeili/meilisearch:v1
+    environment:
+      MEILI_ENV: development
+      MEILI_MASTER_kEY: "meili_key"
+    ports:
+      - "7700:7700"
+    volumes:
+      - "./meilisearch-data-search_layer:/meili_data"
+
+
 
 volumes:
   postgres-data-search_layer:
   typesense-data-search_layer:
+  meilisearch-data-search_layer:
 
