@@ -1,7 +1,7 @@
+import { PostNormalizer } from '#infrastructure/Search/normalizer/posts_normalizer'
+import { SearchDocument } from '#infrastructure/Search/search_document'
 import Post from '#models/post'
 import { LucidModel } from '@adonisjs/lucid/types/model'
-import { SearchDocument } from '../../src/Infrastructure/Search/search_document.js'
-import { PostNormalizer } from '../../src/Infrastructure/Search/normalizer/posts_normalizer.js'
 
 type FormatIndexer = 'POST' | 'TAXONOMY'
 

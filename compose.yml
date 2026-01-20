@@ -29,6 +29,11 @@ services:
       - "7700:7700"
     volumes:
       - "./meilisearch-data-search_layer:/meili_data"
+  redis:
+    restart: unless-stopped
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
 
 
 

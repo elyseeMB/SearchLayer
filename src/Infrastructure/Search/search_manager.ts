@@ -5,12 +5,34 @@ import type { ApplicationService } from '@adonisjs/core/types'
 import { TypesenseIndexer } from './Typesense/typesense_indexer.js'
 import { IndexerInterface } from './indexer_interface.js'
 import { SEARCH_ENGINE, TYPE_SEARCH } from '#enums/search'
+import { MeilisearchIndexer } from './meilisearch/meilisearch_indexer.js'
+import { MeilisearchSearch } from './meilisearch/meilisearch_search.js'
+import { clientInterface } from './client_Interface.js'
+import { TypesenseClient } from './Typesense/typesense_client.js'
+import { MeilisearchClient } from './meilisearch/meilisearch_client.js'
 
 export class SearchManager {
   private searchDrivers: Map<TYPE_SEARCH, SearchInterface> = new Map()
   private indexerDrivers: Map<TYPE_SEARCH, IndexerInterface> = new Map()
+  private clientDrivers: Map<TYPE_SEARCH, clientInterface> = new Map()
 
   constructor(protected app: ApplicationService) {}
+
+  public get getEngine(): TYPE_SEARCH {
+    return env.get('SEARCH_ENGINE') as TYPE_SEARCH
+  }
+
+  /**
+   * client
+   */
+  public async client(name?: TYPE_SEARCH): Promise<clientInterface> {
+    const engine = name || (env.get('SEARCH_ENGINE') as TYPE_SEARCH)
+    if (this.clientDrivers.has(engine)) return this.clientDrivers.get(engine)!
+
+    const { client } = await this.resolve(engine)
+    this.clientDrivers.set(engine, client)
+    return client
+  }
 
   /**
    * search
@@ -25,6 +47,7 @@ export class SearchManager {
   }
 
   /**
+   *
    * indexer
    */
   public async indexer(name?: TYPE_SEARCH): Promise<IndexerInterface> {
@@ -41,24 +64,27 @@ export class SearchManager {
       [SEARCH_ENGINE.TYPESENSE]: {
         search: TypesenseSearch,
         indexer: TypesenseIndexer,
+        client: TypesenseClient,
       },
       [SEARCH_ENGINE.MEILISEARCH]: {
-        search: null,
-        indexer: null,
+        search: MeilisearchSearch,
+        indexer: MeilisearchIndexer,
+        client: MeilisearchClient,
       },
     }
 
     const config = driversConfig[engine]
 
-    if (!config || !config.search || !config.indexer) {
+    if (!config || !config.search || !config.indexer || !config.client) {
       throw new Error(`Search engine "${engine}" is not fully implemented.`)
     }
 
-    const [search, indexer] = await Promise.all([
+    const [search, indexer, client] = await Promise.all([
       this.app.container.make(config.search),
       this.app.container.make(config.indexer),
+      this.app.container.make(config.client),
     ])
 
-    return { search, indexer }
+    return { search, indexer, client }
   }
 }

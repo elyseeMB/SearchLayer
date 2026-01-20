@@ -15,7 +15,7 @@ export default class SearchesController {
       console.log('==========================')
     }
 
-    const search = await manager.search(SEARCH_ENGINE.TYPESENSE)
+    const search = await manager.search(SEARCH_ENGINE.MEILISEARCH)
 
     const results = await search.search(q)
 

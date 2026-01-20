@@ -1,3 +1,4 @@
+import { clientInterface } from '../client_Interface.js'
 import { TypesenseException } from './typesense_exception.js'
 
 export type Document = {
@@ -39,7 +40,7 @@ export type Hit = {
   text_match_info: TextMatchInfo
 }
 
-export type SearchResponse = {
+export type SearchResponseTypesense = {
   facet_counts: any[]
   found: number
   hits: Hit[]
@@ -57,14 +58,14 @@ export type SearchResponse = {
 
 const methods = ['PUT', 'GET', 'POST', 'PATCH', 'DELETE', 'HEAD'] as const
 
-export class TypesenseClient {
+export class TypesenseClient implements clientInterface<SearchResponseTypesense> {
   constructor(
     private readonly host: string,
     private readonly apiKey: string
   ) {}
 
   public get(endpoint: string) {
-    return this.api<SearchResponse>(endpoint, { method: 'GET', data: undefined })
+    return this.api<SearchResponseTypesense>(endpoint, { method: 'GET', data: undefined })
   }
 
   public post(endpoint: string, data: Record<string, any> | string) {
@@ -74,7 +75,7 @@ export class TypesenseClient {
     })
   }
 
-  public dropAll(endpoint: string) {
+  public deleteAll(endpoint: string) {
     return this.api(endpoint, { method: 'DELETE', data: {} })
   }
 
