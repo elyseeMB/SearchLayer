@@ -1,44 +1,10 @@
-import { clientInterface } from '../client_Interface.js'
+import { POSTResponse, SearchResponse } from 'types/global.js'
+import { ClientHttpInterface } from '../clientHttp_Interface.js'
 import { MeilisearchException } from './meilisearch_exception.js'
-
-export type POSTResponse = {
-  ['indexes/content/documents']: {
-    taskUid: number
-    indexUid: string
-    status: string
-    type: string
-    enqueuedAt: string
-  }
-
-  ['indexes/content/search']: {
-    hits: Record<string, any>[]
-    offset: number
-    limit: number
-    estimatedTotalHits: number
-    totalHits: number
-    semanticHitCount?: number
-    totalPages: number
-    hitsPerPage: number
-    page: number
-    facetDistribution?: Record<string, Record<string, number>>
-    facetStats?: Record<string, { min: number; max: number }>
-    processingTimeMs: number
-    query: string
-    requestUid: string
-  }
-}
-
-export type SearchResponse = {
-  ['/post']: POSTResponse
-  uid: string
-  createdAt: string
-  updatedAt: string
-  primaryKey: string
-}
 
 const methods = ['PUT', 'GET', 'POST', 'PATCH', 'DELETE', 'HEAD'] as const
 
-export class MeilisearchClient implements clientInterface<SearchResponse> {
+export class MeilisearchClient implements ClientHttpInterface<SearchResponse> {
   constructor(
     private readonly host: string,
     private readonly apiKey: string
@@ -48,11 +14,11 @@ export class MeilisearchClient implements clientInterface<SearchResponse> {
     return this.api<SearchResponse>(endpoint, { method: 'GET', data: undefined })
   }
 
-  public post<T extends keyof SearchResponse['/post']>(
+  public post<T extends keyof POSTResponse>(
     endpoint: string,
     data: Record<string, any> | string
-  ): Promise<SearchResponse['/post'][T]> {
-    return this.api<SearchResponse['/post'][T]>(endpoint, {
+  ): Promise<POSTResponse[T]> {
+    return this.api<POSTResponse[T]>(endpoint, {
       method: 'POST',
       data,
     })

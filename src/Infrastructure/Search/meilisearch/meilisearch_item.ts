@@ -1,36 +1,26 @@
+import { POSTResponse } from 'types/global.js'
 import { SearchResultItemInterface } from '../search_resultItem_interface.js'
-import { POSTResponse } from './meilisearch_client.js'
 
 export class MeilisearchItem implements SearchResultItemInterface {
-  constructor(private readonly item: POSTResponse['indexes/content/search']['hits'][number]) {
-    console.log('MeilisearchItem++++++++++++++++++++++')
-    console.log('MeilisearchItem++++++++++++++++++++++')
-    console.log('MeilisearchItem++++++++++++++++++++++')
-    console.log('MeilisearchItem++++++++++++++++++++++')
-    console.log(item)
-    console.log('MeilisearchItem++++++++++++++++++++++')
-    console.log('MeilisearchItem++++++++++++++++++++++')
-    console.log('MeilisearchItem++++++++++++++++++++++')
-    console.log('MeilisearchItem++++++++++++++++++++++')
-  }
+  constructor(private readonly item: POSTResponse['/search']['hits'][number]) {}
 
   getTitle(): string {
-    return this.item.document.title
+    return this.item._formatted.title
   }
 
   getBody(): string {
-    return this.item.document.body
+    return this.item._formatted.body
   }
 
   getDescription(): string {
-    return this.item.document.description
+    return this.item._formatted.description
   }
 
   getUrl(): string {
-    return this.item.document.url
+    return this.item._formatted.url
   }
 
   getCreatedAt(): Date {
-    return new Date(this.item.document.createdAt)
+    return new Date(this.item.createdAt)
   }
 }

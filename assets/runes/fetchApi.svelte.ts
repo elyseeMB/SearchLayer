@@ -1,7 +1,5 @@
-type PropsData = {}
-
-export function fetchApi(options: RequestInit = {}) {
-  let data = $state<[]>([])
+export function fetchApi<T = Array<unknown>>(options: RequestInit = {}) {
+  let data = $state<T>([] as T)
   let loading = $state<boolean>(false)
   let errors = $state<string | null>(null)
 
@@ -24,7 +22,7 @@ export function fetchApi(options: RequestInit = {}) {
           cause: response.status,
         })
       }
-      data = await response.json()
+      data = (await response.json()) as T
     } catch (err) {
       errors = err instanceof Error ? err.message : 'Error server'
     } finally {

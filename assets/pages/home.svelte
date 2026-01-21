@@ -8,15 +8,25 @@
   import type { ChangeEventHandler } from 'svelte/elements'
   import Input from '@/components/ui/input/input.svelte'
   import { fetchApi } from '@/runes/fetchApi.svelte.js'
+  import Article from '@/components/article.svelte'
+
+  type Item = Array<{
+    id: string
+    title: HTMLElement
+    body: string
+    description: string
+    createdAt: number
+    url: string
+  }>
 
   let query: string | null = $state(null)
-  const api = fetchApi()
+  const api = fetchApi<Item>()
 
   const HOST = 'http://localhost:3333'
   const SEARCH = new URL('/search', HOST)
 
   let results = $derived.by(() => {
-    let data: Array<{}>
+    let data: Item
     data = api.data
     if (query === '') {
       return []
@@ -25,8 +35,10 @@
     if (query !== '' && query !== null && api.data.length > 0) {
       SEARCH.searchParams.set('q', encodeURI(query))
       SEARCH.searchParams.set('redirect', '0')
-      data = [...api.data, { url: `${SEARCH}` }]
+      data = [...api.data]
+      const last = data.pop()
     }
+
     return data
   })
 
@@ -66,11 +78,9 @@
     <div class="flex flex-1 flex-col gap-4 p-4">
       <Input oninput={onInput} type="text" value={query} placeholder="search..." name="q" />
 
-      <ul>
+      <ul class="grid grid-cols-3 gap-2">
         {#each results as item}
-          <li>
-            {JSON.stringify(item)}
-          </li>
+          <Article {...item} />
         {/each}
       </ul>
     </div>

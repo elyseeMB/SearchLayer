@@ -1,4 +1,4 @@
-import { clientInterface } from '../client_Interface.js'
+import { ClientHttpInterface } from '../clientHttp_Interface.js'
 import { TypesenseException } from './typesense_exception.js'
 
 export type Document = {
@@ -58,7 +58,7 @@ export type SearchResponseTypesense = {
 
 const methods = ['PUT', 'GET', 'POST', 'PATCH', 'DELETE', 'HEAD'] as const
 
-export class TypesenseClient implements clientInterface<SearchResponseTypesense> {
+export class TypesenseClient implements ClientHttpInterface<SearchResponseTypesense> {
   constructor(
     private readonly host: string,
     private readonly apiKey: string

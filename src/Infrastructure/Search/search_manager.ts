@@ -7,7 +7,7 @@ import { IndexerInterface } from './indexer_interface.js'
 import { SEARCH_ENGINE, TYPE_SEARCH } from '#enums/search'
 import { MeilisearchIndexer } from './meilisearch/meilisearch_indexer.js'
 import { MeilisearchSearch } from './meilisearch/meilisearch_search.js'
-import { clientInterface } from './client_Interface.js'
+import { clientInterface } from './clientHttp_Interface.js'
 import { TypesenseClient } from './Typesense/typesense_client.js'
 import { MeilisearchClient } from './meilisearch/meilisearch_client.js'
 

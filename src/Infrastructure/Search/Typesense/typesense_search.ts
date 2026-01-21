@@ -1,9 +1,9 @@
 import { inject } from '@adonisjs/core'
 import { SearchInterface } from '../search_interface.js'
 import { SearchResult } from '../search_result.js'
-import { TypesenseClient } from './typesense_client.js'
 import { TypesenseException } from './typesense_exception.js'
 import { TypesenseItem } from './typesense_item.js'
+import { TypesenseClient } from './typesense_client.js'
 
 function addQuery(url: string, params: Record<string, any>) {
   if (!params) {

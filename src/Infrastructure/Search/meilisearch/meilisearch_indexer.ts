@@ -21,10 +21,7 @@ export class MeilisearchIndexer implements IndexerInterface {
   }
 
   public async indexMultipleDocuments(items: SearchDocument[]) {
-    return this.client.post<'indexes/content/documents'>(
-      `indexes/${COLLECTION_SCHEMA['uid']}/documents`,
-      items
-    )
+    return this.client.post<'/documents'>(`indexes/${COLLECTION_SCHEMA['uid']}/documents`, items)
   }
 
   private async createCollection() {

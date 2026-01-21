@@ -1,4 +1,4 @@
-export abstract class clientInterface<Response = any> {
+export abstract class ClientHttpInterface<Response = any> {
   abstract get(endpoint: string): Promise<Response>
 
   abstract post(endpoint: string, data: Record<string, any> | string): Promise<Response | unknown>
