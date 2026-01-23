@@ -14,7 +14,7 @@ export default class extends BaseSchema {
         .inTable('products')
         .onDelete('CASCADE')
       table.text('review_text').notNullable()
-      table.decimal('rating', 3, 2).nullable()
+      table.decimal('rating', 3, 2).notNullable()
       table.integer('helpful_count').unsigned().defaultTo(0)
       table.string('reviewer_name', 255).nullable()
       table.boolean('verified_purchase').defaultTo(false)
@@ -24,7 +24,7 @@ export default class extends BaseSchema {
       table.timestamp('updated_at', { useTz: true })
 
       table.index(['product_id', 'rating'])
-      table.index('is_top_review')
+      table.index(['product_id', 'is_top_review'])
     })
   }
 

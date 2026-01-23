@@ -17,7 +17,6 @@ export default class extends BaseSchema {
       table.integer('order').unsigned().defaultTo(0)
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
-
       table.index('product_id')
     })
   }

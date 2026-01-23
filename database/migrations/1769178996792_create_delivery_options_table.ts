@@ -16,7 +16,6 @@ export default class extends BaseSchema {
       table.text('option_text').notNullable()
       table.date('estimated_date').nullable()
       table.boolean('is_fastest').defaultTo(false)
-      table.timestamp('scraped_at', { useTz: true }).nullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
 

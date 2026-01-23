@@ -21,7 +21,6 @@ export default class extends BaseSchema {
         .inTable('sellers')
         .onDelete('CASCADE')
       table.decimal('price', 10, 2).nullable()
-      table.boolean('is_buybox_winner').defaultTo(false)
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
 

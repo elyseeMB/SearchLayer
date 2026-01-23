@@ -18,8 +18,6 @@ export default class extends BaseSchema {
       table.decimal('final_price', 10, 2).nullable()
       table.string('discount', 20).nullable()
       table.string('currency', 10).defaultTo('USD')
-      table.json('prices_breakdown').nullable()
-      table.json('buybox_prices').nullable()
 
       table.timestamp('price_date', { useTz: true }).notNullable()
       table.timestamp('created_at', { useTz: true })

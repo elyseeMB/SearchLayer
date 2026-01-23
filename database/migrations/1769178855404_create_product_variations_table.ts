@@ -13,7 +13,6 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('products')
         .onDelete('CASCADE')
-      table.string('asin', 50).notNullable().index()
       table.string('name', 255).notNullable()
       table.string('variation_type', 100).nullable()
       table.timestamp('created_at', { useTz: true })
