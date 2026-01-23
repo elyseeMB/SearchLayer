@@ -25,5 +25,5 @@ yarn-error.log
 .DS_Store
 
 #search
-meilisearch-data-search_layer
-typesense-data-search_layer
+/meilisearch-data-search_layer
+/typesense-data-search_layer
