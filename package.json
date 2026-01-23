@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "imports": {
+    "#helpers/*": "./helpers/*.js",
     "#enums/*": "./app/enums/*.js",
     "#infrastructure/*": "./src/Infrastructure/*.js",
     "#controllers/*": "./app/controllers/*.js",
@@ -76,6 +77,7 @@
     "@inertiajs/svelte": "^2.3.10",
     "@tailwindcss/vite": "^4.1.18",
     "@vinejs/vine": "^3.0.1",
+    "csv-parse": "^6.1.0",
     "debounce": "^3.0.0",
     "luxon": "^3.7.2",
     "pg": "^8.16.3",

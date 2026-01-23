@@ -8,9 +8,9 @@
     variants: {
       variant: {
         default:
-          'text-primary-foreground hover:bg-primary/15 shadow-xs border border-[var(--primary)] border-b-[5px]',
+          'text-primary-foreground hover:bg-primary/15 shadow-xs border border-[var(--primary)] border-b-[5px] dark:text-white dark:bg-primary/10 dark:hover:dark:bg-primary/30',
         destructive:
-          'bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 text-white shadow-xs',
+          'hover:bg-destructive/15 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/10 dark:hover:dark:bg-destructive/30 dark:text-white text-primary-foreground shadow-xs border border-[var(--destructive)] border-b-[5px] ',
         outline:
           'bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border border-b-[var(--secondary)] border-b-[5px]',
         secondary:

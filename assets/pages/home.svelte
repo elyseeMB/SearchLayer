@@ -252,13 +252,6 @@
       </div>
 
       <div class="flex items-center justify-end">
-        <!-- <Footer class="border-t-0 ">
-          <Row class="flex justify-between">
-            <Cell colspan={3}>Total</Cell>
-            <Cell class="text-end">$2,500.00</Cell>
-          </Row>
-        </Footer>
-        <Caption>A list of your recent invoices.</Caption> -->
         <div class="flex w-full items-center justify-end gap-8 lg:w-fit">
           <div class="hidden items-center gap-2 lg:flex">
             <Label for="rows-per-page" class="text-sm font-medium">Rows per page</Label>
