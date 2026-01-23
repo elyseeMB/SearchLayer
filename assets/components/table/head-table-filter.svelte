@@ -6,8 +6,8 @@
   let { title }: Props = $props()
 
   import { ChevronsUpDown, MoveUp, MoveDown } from '@lucide/svelte'
-  import Button from './ui/button/button.svelte'
-  import { Head } from './ui/table/index.js'
+  import Button from '../ui/button/button.svelte'
+  import { Head } from '../ui/table/index.js'
   import DropdownMenu from '@/components/ui/dropdown-menu/dropdown-menu.svelte'
   import {
     Trigger as TriggerDropdown,
@@ -22,7 +22,7 @@
   ]
 </script>
 
-<Head class="text-end px-4">
+<Head class="text-end px-4 w-full">
   <DropdownMenu>
     <TriggerDropdown>
       {#snippet child({ props })}
@@ -31,7 +31,7 @@
           variant="ghost"
           class="flex items-center gap-1 p-0! m-0! hover:text-primary hover:cursor-pointer hover:bg-transparent"
         >
-          <ChevronsUpDown />
+          <ChevronsUpDown size={16} />
           {title}
         </Button>
       {/snippet}

@@ -1,7 +1,6 @@
 import { PostFactory } from '#database/factories/post_factory'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import db from '@adonisjs/lucid/services/db'
-import { ensureRelation } from '@adonisjs/lucid/utils'
 
 export default class extends BaseSeeder {
   async run() {

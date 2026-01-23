@@ -25,7 +25,6 @@ export default class extends BaseSchema {
       table.timestamp('updated_at', { useTz: true })
 
       table.unique(['product_id', 'seller_id'])
-      table.index('is_buybox_winner')
     })
   }
 

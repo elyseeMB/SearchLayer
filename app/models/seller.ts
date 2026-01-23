@@ -5,6 +5,12 @@ export default class Seller extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
+  @column()
+  declare sellerId: string
+
+  @column()
+  declare sellerName: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

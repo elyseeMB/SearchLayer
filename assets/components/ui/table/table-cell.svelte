@@ -14,7 +14,7 @@
   bind:this={ref}
   data-slot="table-cell"
   class={cn(
-    'bg-clip-padding p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pe-0 truncate max-w-[200px]',
+    'bg-clip-padding p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pe-0 truncate w-min-[70px]! max-w-[200px]',
     className
   )}
   {...restProps}
