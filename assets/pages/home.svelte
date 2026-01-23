@@ -11,28 +11,39 @@
 
   import Table from '@/components/ui/table/table.svelte'
   import { Body, Caption, Cell, Footer, Head, Header, Row } from '@/components/ui/table/index.js'
-  import Button from '@/components/ui/button/button.svelte'
+  import Button, { buttonVariants } from '@/components/ui/button/button.svelte'
   import {
-    ChevronDownIcon,
+    ArrowLeft,
+    ArrowRight,
+    Calendar,
     ChevronLeft,
     ChevronRight,
-    ChevronRightIcon,
     ChevronsLeft,
     ChevronsRight,
-    Columns2Icon,
+    ChevronsUpDown,
+    Funnel,
+    ListFilter,
     PlusIcon,
+    SearchIcon,
   } from '@lucide/svelte'
   import Label from '@/components/ui/label/label.svelte'
   import Select from '@/components/ui/select/select.svelte'
   import { Content, Item, Trigger } from '@/components/ui/select/index.js'
+  import { DateFormatter } from '@internationalized/date'
+  import { router } from '@inertiajs/svelte'
+  import InputGroup from '@/components/ui/input-group/input-group.svelte'
+  import { Addon } from '@/components/ui/input-group/index.js'
+  import InputGroupInput from '@/components/ui/input-group/input-group-input.svelte'
+
   import DropdownMenu from '@/components/ui/dropdown-menu/dropdown-menu.svelte'
   import {
     Trigger as TriggerDropdown,
+    Item as ItemDropdown,
+    Group as GroupDropdown,
     Content as ContentDropdown,
   } from '@/components/ui/dropdown-menu/index.js'
-  import { DateFormatter } from '@internationalized/date'
-  import { router } from '@inertiajs/svelte'
-
+  import ButtonGroup from '@/components/ui/button-group/button-group.svelte'
+  import HeadTableFilter from '@/components/head-table-filter.svelte'
   type Item = Array<{
     id: string
     title: HTMLElement
@@ -127,14 +138,76 @@
 
     <div class="flex flex-1 flex-col gap-4 p-4">
       <div class="flex w-full items-center justify-between gap-2">
-        <Input
-          class="w-fit py-0"
-          oninput={onInput}
-          type="text"
-          value={query}
-          placeholder="search..."
-          name="q"
-        />
+        <div class="flex items-center gap-2">
+          <div class="hidden items-center gap-2 lg:flex">
+            <ButtonGroup>
+              <DropdownMenu>
+                <TriggerDropdown>
+                  {#snippet child({ props })}
+                    <Button {...props} variant="outline">
+                      <ListFilter />
+                    </Button>
+                  {/snippet}
+                </TriggerDropdown>
+                <ContentDropdown class="w-56" align="start">
+                  <GroupDropdown>
+                    {#each [10, 20, 30, 40, 50] as pageSize (pageSize)}
+                      <ItemDropdown onclick={() => console.log('filter')}>
+                        {pageSize}
+                      </ItemDropdown>
+                    {/each}
+                  </GroupDropdown>
+                </ContentDropdown>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <TriggerDropdown>
+                  {#snippet child({ props })}
+                    <Button {...props} variant="outline">
+                      <Calendar />
+                    </Button>
+                  {/snippet}
+                </TriggerDropdown>
+                <ContentDropdown class="w-56" align="start">
+                  <GroupDropdown>
+                    {#each [10, 20, 30, 40, 50] as pageSize (pageSize)}
+                      <ItemDropdown onclick={() => console.log('filter')}>
+                        {pageSize}
+                      </ItemDropdown>
+                    {/each}
+                  </GroupDropdown>
+                </ContentDropdown>
+              </DropdownMenu>
+            </ButtonGroup>
+
+            <!-- <Popover>
+              <TriggerPopover class={buttonVariants({ variant: 'outline' })}>
+                <Funnel />
+              </TriggerPopover>
+              <ContentPopover>
+                {#each [10, 20, 30, 40, 50] as pageSize (pageSize)}
+                  <Item onclick={() => console.log} value={pageSize.toString()}>
+                    {pageSize}
+                  </Item>
+                {/each}
+              </ContentPopover>
+            </Popover> -->
+          </div>
+
+          <InputGroup>
+            <InputGroupInput
+              oninput={onInput}
+              type="text"
+              value={query}
+              name="q"
+              placeholder="Search..."
+            />
+            <Addon>
+              <SearchIcon />
+            </Addon>
+          </InputGroup>
+        </div>
+
         <div class="flex items-center gap-2">
           <!-- <DropdownMenu>
             <TriggerDropdown>
@@ -149,7 +222,7 @@
             </TriggerDropdown>
             <ContentDropdown align="end" class="w-56">bonjour les gens</ContentDropdown>
           </DropdownMenu> -->
-          <Button variant="outline" size="sm">
+          <Button variant="default" size="sm">
             <PlusIcon />
             <span class="hidden lg:inline">Add Section</span>
           </Button>
@@ -157,21 +230,21 @@
       </div>
       <div class="rounded-lg border border-border overflow-hidden">
         <Table>
-          <Header class="">
+          <Header>
             <Row>
-              <Head class="w-[100px] px-4 py-3">Title</Head>
-              <Head class="px-4 py-3">description</Head>
-              <Head class="px-4 py-3">created at</Head>
-              <Head class="text-end px-4 py-3">Page title</Head>
+              <HeadTableFilter title="Title" />
+              <HeadTableFilter title="Description" />
+              <HeadTableFilter title="Created at" />
+              <HeadTableFilter title="Page title" />
             </Row>
           </Header>
           <Body>
             {#each items as item}
               <Row>
-                <Cell class="font-medium px-4 py-3">{item.title}</Cell>
-                <Cell class="px-4 py-3">{item.description}</Cell>
-                <Cell class="px-4 py-3">{item.createdAt}</Cell>
-                <Cell class="text-end px-4 py-3">{item.pageTitle}</Cell>
+                <Cell class="font-medium px-4">{item.title}</Cell>
+                <Cell class="px-4">{item.description}</Cell>
+                <Cell class="px-4">{item.createdAt}</Cell>
+                <Cell class="text-end px-4">{item.pageTitle}</Cell>
               </Row>
             {/each}
           </Body>
