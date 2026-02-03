@@ -1,11 +1,11 @@
 <script lang="ts">
   interface Props {
-    title: string
+    rowEnabled: Record<string, any>
   }
 
-  let { title }: Props = $props()
+  let { rowEnabled: row }: Props = $props()
 
-  import { ChevronsUpDown, MoveUp, MoveDown } from '@lucide/svelte'
+  import { MoveUp, MoveDown, ListFilter } from '@lucide/svelte'
   import Button from '../ui/button/button.svelte'
   import { Head } from '../ui/table/index.js'
   import DropdownMenu from '@/components/ui/dropdown-menu/dropdown-menu.svelte'
@@ -15,10 +15,35 @@
     Group as GroupDropdown,
     Content as ContentDropdown,
   } from '@/components/ui/dropdown-menu/index.js'
+  import { router } from '@inertiajs/svelte'
+
+  const updateOrder = (order: 'asc' | 'desc') => {
+    const url = new URL(window.location.href)
+    url.searchParams.set(
+      'sort',
+      JSON.stringify({
+        field: row.key,
+        order,
+      })
+    )
+    return router.get(url.toString())
+  }
 
   const items = [
-    { label: 'Sort Ascending', icon: MoveUp },
-    { label: 'Sort Descending', icon: MoveDown },
+    {
+      label: 'Sort Ascending',
+      icon: MoveUp,
+      order_y: (): void => {
+        return updateOrder('asc')
+      },
+    },
+    {
+      label: 'Sort Descending',
+      icon: MoveDown,
+      order_y: (): void => {
+        return updateOrder('desc')
+      },
+    },
   ]
 </script>
 
@@ -31,15 +56,15 @@
           variant="ghost"
           class="flex items-center gap-1 p-0! m-0! hover:text-primary hover:cursor-pointer hover:bg-transparent"
         >
-          <ChevronsUpDown size={16} />
-          {title}
+          <ListFilter />
+          {row.label}
         </Button>
       {/snippet}
     </TriggerDropdown>
     <ContentDropdown class="w-56" align="start">
       <GroupDropdown>
         {#each items as item, _}
-          <ItemDropdown onclick={() => console.log('filter')}>
+          <ItemDropdown disabled={!row.sortable} onclick={() => item.order_y()}>
             <item.icon />
             {item.label}
           </ItemDropdown>

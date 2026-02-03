@@ -56,10 +56,9 @@
     url: string
   }>
 
-  const { posts, products } = $props()
+  const { posts, columns } = $props()
 
-  console.log(products)
-  console.log(posts)
+  console.log(posts, columns)
 
   let items = $derived.by(() =>
     posts.data.map((i) => ({
@@ -88,18 +87,16 @@
       preserveState: true,
     })
   }
-
-  let rowsEnabled = $derived.by(() => {
-    return Object.keys(items[0]).map((i) => toCamelCase(i))
-  })
 </script>
+
+<div></div>
 
 <MainLayout>
   <Wrapper title="Posts" class="flex flex-1 flex-col gap-4">
-    <TableItem collections={posts} />
+    <TableItem collections={posts} {columns} />
   </Wrapper>
 
-  <Wrapper title="Products">
+  <!-- <Wrapper title="Products">
     <TableItem collections={products} />
-  </Wrapper>
+  </Wrapper> -->
 </MainLayout>

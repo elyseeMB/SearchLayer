@@ -8,7 +8,7 @@
   } from '@/components/ui/dropdown-menu/index.js'
   import ButtonGroup from '@/components/ui/button-group/button-group.svelte'
   import Button from '../ui/button/button.svelte'
-  import { Calendar, ListFilter } from '@lucide/svelte'
+  import { Calendar, Funnel } from '@lucide/svelte'
 </script>
 
 <div class="hidden items-center gap-2 lg:flex">
@@ -17,7 +17,7 @@
       <TriggerDropdown>
         {#snippet child({ props })}
           <Button {...props} variant="outline">
-            <ListFilter />
+            <Funnel />
           </Button>
         {/snippet}
       </TriggerDropdown>

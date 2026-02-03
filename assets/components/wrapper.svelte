@@ -6,6 +6,6 @@
 </script>
 
 <section class="flex flex-1 flex-col gap-4">
-  <h1 class="text-2xl">{title?.toUpperCase()}</h1>
+  <h1 class="text-lg font-bold text-heading">{title?.toUpperCase()}</h1>
   {@render children?.()}
 </section>
