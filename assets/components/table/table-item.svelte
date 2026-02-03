@@ -51,3 +51,9 @@
 </div>
 
 <TableFooter meta={collections.meta} />
+
+<style>
+  .table-item {
+    width: calc(100vw - 3rem);
+  }
+</style>
