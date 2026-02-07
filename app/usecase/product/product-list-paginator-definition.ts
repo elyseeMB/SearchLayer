@@ -1,39 +1,24 @@
-import Post from '#models/post'
+import Product from '#models/product'
 import { BaseDefinition } from '../base_definition.js'
 
-type FieldItem = {
-  label: string
-  sortable: boolean
-  hidden?: boolean
-}
-
-type FieldConfig = {
-  id: FieldItem
-  title: FieldItem
-  description: FieldItem
-  page_title: FieldItem
-  body: FieldItem
-  created_at: FieldItem
-  updated_at: FieldItem
-}
-
-export class PostListPaginatorDefinition extends BaseDefinition<typeof Post, Post> {
-  private fieldConfig: FieldConfig = {
+export class ProductListPaginatorDefinition extends BaseDefinition<typeof Product, Product> {
+  private fieldConfig: Partial<{}> = {
     id: { label: 'ID', sortable: true },
     title: { label: 'Title', sortable: true },
-    description: { label: 'Description', sortable: false },
-    page_title: { label: 'Page Title', sortable: false },
-    body: { label: 'Body', sortable: false },
-    created_at: { label: 'Created At', sortable: true },
-    updated_at: { label: 'Updated At', sortable: true },
+    created_at: { label: 'createdAt', sortable: true },
+    rating: { label: 'rating', sortable: true },
+    brand_id: { label: 'BrandId', sortable: true },
+    seller_id: { label: 'Seller Id', sortable: true },
+    reviews_count: { label: 'reviewsCount', sortable: true },
+    description: { label: 'description', sortable: true },
   }
 
   constructor() {
-    super(Post)
+    super(Product)
   }
 
   static new() {
-    return new PostListPaginatorDefinition()
+    return new ProductListPaginatorDefinition()
   }
 
   async EnabledField() {

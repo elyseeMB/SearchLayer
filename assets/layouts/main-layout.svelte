@@ -4,10 +4,10 @@
   import AppSidebar from '@/components/app-sidebar.svelte'
   import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb.svelte'
   import {
-    List,
+    Separator as BreadcrumbSepartor,
     Item,
     Link,
-    Separator as BreadcrumbSepartor,
+    List,
     Page,
   } from '@/components/ui/breadcrumb/index.js'
   import { Separator } from '@/components/ui/separator/index.js'
@@ -39,7 +39,7 @@
   <AppSidebar />
   <Inset>
     {@render header()}
-    <div class="flex flex-1 flex-col gap-10 p-4">
+    <div class="flex flex-1 flex-col gap-10 p-8">
       {@render children?.()}
     </div>
   </Inset>

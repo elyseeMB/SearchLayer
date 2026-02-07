@@ -1,6 +1,6 @@
 import Post from '#models/post'
 import Product from '#models/product'
-import { ProductListPaginatorDefinition } from '#usecase/post/post-list-paginator-definition'
+import { PostListPaginatorDefinition } from '#usecase/post/post-list-paginator-definition'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class PostsController {
@@ -21,19 +21,9 @@ export default class PostsController {
       .orderBy(sortData.field, sortData.order)
       .paginate(page, limit)
 
-    const products = await Product.query()
-      .preload('categories')
-      .preload('brand')
-      .preload('seller')
-      .preload('features')
-      .preload('prices')
-      .orderBy('id', 'asc')
-      .paginate(page, limit)
-
-    return inertia.render('home', {
+    return inertia.render('posts/post_index', {
       posts: data,
       columns: enabledField,
-      products,
     })
   }
 }

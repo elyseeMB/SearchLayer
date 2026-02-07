@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
 import { BaseModel, beforeSave, column } from '@adonisjs/lucid/orm'
 import { SlugifyService } from '#services/slugify_service'
-import { ProductListPaginatorDefinition } from '#usecase/post/post-list-paginator-definition'
+import { PostListPaginatorDefinition } from '#usecase/post/post-list-paginator-definition'
 
 export default class Post extends BaseModel {
-  static build = () => ProductListPaginatorDefinition.new()
+  static build = () => PostListPaginatorDefinition.new()
 
   @column({ isPrimary: true })
   declare id: number

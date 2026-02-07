@@ -1,5 +1,10 @@
-<script lang="ts" module>
-  import { router, Link } from '@inertiajs/svelte'
+<script lang="ts">
+  import SearchForm from './search-form.svelte'
+  import VersionSwitcher from './version-switcher.svelte'
+  import * as Sidebar from '@/components/ui/sidebar/index.js'
+  import type { ComponentProps } from 'svelte'
+
+  import { inertia, Link } from '@inertiajs/svelte'
 
   // sample data
   const data = {
@@ -10,20 +15,21 @@
         url: '#',
         items: [
           {
-            title: 'post',
+            title: 'Dashboard',
+            url: '/',
+          },
+          {
+            title: 'Post',
             url: '/post',
+          },
+          {
+            title: 'Product',
+            url: '/product',
           },
         ],
       },
     ],
   }
-</script>
-
-<script lang="ts">
-  import SearchForm from './search-form.svelte'
-  import VersionSwitcher from './version-switcher.svelte'
-  import * as Sidebar from '@/components/ui/sidebar/index.js'
-  import type { ComponentProps } from 'svelte'
 
   let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props()
 </script>
@@ -44,7 +50,7 @@
               <Sidebar.MenuItem>
                 <Sidebar.MenuButton isActive={item.isActive}>
                   {#snippet child({ props })}
-                    <Link href={item.url} {...props}>{item.title}</Link>
+                    <a href={item.url} use:inertia {...props}> {item.title} </a>
                   {/snippet}
                 </Sidebar.MenuButton>
               </Sidebar.MenuItem>

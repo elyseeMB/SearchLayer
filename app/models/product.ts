@@ -1,13 +1,16 @@
-import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, hasMany, manyToMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Brand from '#models/brand'
-import Seller from '#models/seller'
+import Category from '#models/category'
 import Price from '#models/price'
 import ProductFeature from '#models/product_feature'
-import Category from '#models/category'
+import Seller from '#models/seller'
+import { ProductListPaginatorDefinition } from '#usecase/product/product-list-paginator-definition'
+import { BaseModel, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import { DateTime } from 'luxon'
 
 export default class Product extends BaseModel {
+  static build = () => ProductListPaginatorDefinition.new()
+
   @column({ isPrimary: true })
   declare id: number
 

@@ -36,10 +36,6 @@
       )
     })
   })
-
-  $inspect(filteredItems)
-
-  // $inspect(items)
 </script>
 
 <div class="flex flex-col gap-4">
