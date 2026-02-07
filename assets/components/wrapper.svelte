@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { WithElementRef } from '@/lib/utils.js'
+  import { cn, type WithElementRef } from '@/lib/utils.js'
   import type { HTMLAttributes } from 'svelte/elements'
 
-  let { children, title }: WithElementRef<HTMLAttributes<HTMLElement>> = $props()
+  let { children, title, class: className }: WithElementRef<HTMLAttributes<HTMLElement>> = $props()
 </script>
 
-<section class="flex flex-1 flex-col gap-4">
+<section class={cn('w-full', className)}>
   <h1 class="text-lg font-bold text-heading">{title?.toUpperCase()}</h1>
   {@render children?.()}
 </section>

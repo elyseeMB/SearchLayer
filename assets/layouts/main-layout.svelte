@@ -39,7 +39,6 @@
   <AppSidebar />
   <Inset>
     {@render header()}
-
     <div class="flex flex-1 flex-col gap-10 p-4">
       {@render children?.()}
     </div>

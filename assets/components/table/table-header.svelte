@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from '../ui/button/button.svelte'
-  import {  PlusIcon } from '@lucide/svelte'
+  import { PlusIcon } from '@lucide/svelte'
   import { fetchApi } from '@/runes/fetchApi.svelte.js'
   import debounce from 'debounce'
   import type { ChangeEventHandler } from 'svelte/elements'
@@ -18,9 +18,10 @@
 
   interface Props {
     items: Item
+    searchData: any[]
   }
 
-  const { items }: Props = $props()
+  let { items, searchData = $bindable([]) }: Props = $props()
 
   let query: string | null = $state(null)
   const api = fetchApi<Item>()
@@ -55,6 +56,7 @@
   const onInput: ChangeEventHandler<HTMLInputElement> = (e) => {
     query = e.currentTarget.value
     suggest(e)
+    searchData = results
   }
 </script>
 

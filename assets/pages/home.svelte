@@ -60,17 +60,6 @@
 
   console.log(posts, columns)
 
-  let items = $derived.by(() =>
-    posts.data.map((i) => ({
-      title: i.title,
-      description: i.description,
-      createdAt: new DateFormatter(navigator.language.split('-')[0], {
-        dateStyle: 'medium',
-      }).format(new Date(i.createdAt)),
-      pageTitle: i.pageTitle,
-    }))
-  )
-
   // $inspect(items)
 
   function urlWithQueryParams(url: string) {
@@ -89,12 +78,14 @@
   }
 </script>
 
-<div></div>
-
 <MainLayout>
-  <Wrapper title="Posts" class="flex flex-1 flex-col gap-4">
-    <TableItem collections={posts} {columns} />
-  </Wrapper>
+  {#if !posts || !columns || posts.data.length === 0}
+    <p>Bonjour les gens</p>
+  {:else}
+    <Wrapper title="Posts" class="flex flex flex-col gap-4">
+      <TableItem collections={posts} {columns} />
+    </Wrapper>
+  {/if}
 
   <!-- <Wrapper title="Products">
     <TableItem collections={products} />

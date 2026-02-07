@@ -27,6 +27,7 @@ export default class PostsController {
       .preload('seller')
       .preload('features')
       .preload('prices')
+      .orderBy('id', 'asc')
       .paginate(page, limit)
 
     return inertia.render('home', {
