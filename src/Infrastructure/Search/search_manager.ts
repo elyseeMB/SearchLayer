@@ -37,7 +37,7 @@ export class SearchManager {
   /**
    * search
    */
-  public async search(name?: TYPE_SEARCH): Promise<SearchInterface> {
+  public async register(name?: TYPE_SEARCH): Promise<SearchInterface> {
     const engine = name || (env.get('SEARCH_ENGINE') as TYPE_SEARCH)
     if (this.searchDrivers.has(engine)) return this.searchDrivers.get(engine)!
 

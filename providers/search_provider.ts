@@ -14,7 +14,7 @@ export default class SearchProvider {
 
     this.app.container.bind(SearchInterface, async () => {
       const manager = await this.app.container.make(SearchManager)
-      return manager.search()
+      return manager.register()
     })
 
     this.app.container.bind(IndexerInterface, async () => {
