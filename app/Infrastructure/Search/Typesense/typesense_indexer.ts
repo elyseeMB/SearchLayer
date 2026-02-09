@@ -1,5 +1,5 @@
 import { inject } from '@adonisjs/core'
-import { IndexerInterface } from '../indexer_interface.js'
+import { IndexerInterface } from '../contracts/indexer_interface.js'
 import { SearchDocument } from '../search_document.js'
 import { TypesenseClient } from './typesense_client.js'
 import { TypesenseException } from './typesense_exception.js'
@@ -37,7 +37,11 @@ export class TypesenseIndexer implements IndexerInterface {
     this.createCollection()
   }
 
-  public async IndexSingleDocument(items: SearchDocument): Promise<void> {
+  public async flush() {
+    return await this.client.deleteAll('/indexes/content')
+  }
+
+  public async indexSingleDocument(items: SearchDocument): Promise<void> {
     await this.client.patch(`collections/content/documents/${items['id']}`, items)
   }
 

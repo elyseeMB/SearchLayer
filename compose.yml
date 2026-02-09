@@ -24,7 +24,7 @@ services:
     image: getmeili/meilisearch:v1
     environment:
       MEILI_ENV: development
-      MEILI_MASTER_kEY: "meili_key"
+      MEILI_MASTER_kEY: meili_key
     ports:
       - "7700:7700"
     volumes:

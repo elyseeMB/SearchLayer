@@ -1,5 +1,5 @@
 import { inject } from '@adonisjs/core'
-import { SearchInterface } from '../search_interface.js'
+import { SearchInterface } from '../contracts/search_interface.js'
 import { SearchResult } from '../search_result.js'
 import { MeilisearchClient } from './meilisearch_client.js'
 import { MeilisearchException } from './meilisearch_exception.js'

@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
-import { SearchManager } from '../../src/Infrastructure/Search/search_manager.js'
+import { SearchManager } from '#infrastructure/Search/search_manager'
 import { SEARCH_ENGINE } from '#enums/search'
 
 export default class SearchesController {
@@ -15,10 +15,15 @@ export default class SearchesController {
       console.log('==========================')
     }
 
-    const search = await manager.search(SEARCH_ENGINE.MEILISEARCH)
+    const searchTypesense = await manager.register(SEARCH_ENGINE.TYPESENSE)
+    const searchMeilisearch = await manager.register(SEARCH_ENGINE.MEILISEARCH)
 
-    const results = await search.search(q)
+    const resultsTypesense = await searchTypesense.search(q)
+    const resultsMeilisearch = await searchMeilisearch.search(q)
 
-    return response.json(results.getItems())
+    return response.json({
+      typesense: resultsTypesense,
+      meilisearch: resultsMeilisearch,
+    })
   }
 }

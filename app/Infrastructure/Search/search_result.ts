@@ -1,4 +1,4 @@
-import { SearchResultItemInterface } from './search_resultItem_interface.js'
+import { SearchResultItemInterface } from './contracts/search_result_item_interface.js'
 
 export class SearchResult {
   constructor(

@@ -1,4 +1,4 @@
-import { SearchResultItemInterface } from '../search_resultItem_interface.js'
+import { SearchResultItemInterface } from '../contracts/search_result_item_interface.js'
 import { Hit } from './typesense_client.js'
 
 export class TypesenseItem implements SearchResultItemInterface {

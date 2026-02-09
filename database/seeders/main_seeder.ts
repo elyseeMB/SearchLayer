@@ -1,23 +1,21 @@
+import { parseCsv } from '#helpers/csv'
+import Brand from '#models/brand'
+import Category from '#models/category'
+import Product from '#models/product'
+import Seller from '#models/seller'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import db from '@adonisjs/lucid/services/db'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'
-import { parseCsv } from '#helpers/csv'
 import { DateTime } from 'luxon'
-import Product from '#models/product'
-import Brand from '#models/brand'
-import Seller from '#models/seller'
-import Category from '#models/category'
 
 export default class MainSeeder extends BaseSeeder {
   async run() {
-    // On ne lance plus la transaction globale ici
     await this.seedData()
   }
 
   async seedData() {
     const rawData = await parseCsv('products.csv')
 
-    // ⚠️ TEST: On prend seulement les 100 premiers pour vérifier que ça marche
     const data = rawData.slice(0, 100)
 
     console.log(`Processing ${data.length} items from CSV...`)
@@ -27,14 +25,9 @@ export default class MainSeeder extends BaseSeeder {
     for (let i = 0; i < data.length; i++) {
       const item = data[i]
 
-      // ✅ CORRECTION CRITIQUE : Une transaction par item
-      // Si l'item 50 plante, les 49 d'avant sont sauvés et le 51 peut continuer.
       const trx = await db.transaction()
       try {
-        // Sanitize data upfront
         const sanitizedItem = this.sanitizeItem(item)
-
-        // 1. UNIQUE ENTITIES
         const brand = await Brand.firstOrCreate(
           { name: sanitizedItem.brand || 'Generic' },
           { name: sanitizedItem.brand || 'Generic' },
@@ -46,8 +39,6 @@ export default class MainSeeder extends BaseSeeder {
           { sellerName: sanitizedItem.seller_name || 'Unknown', sellerId: sanitizedItem.seller_id },
           { client: trx }
         )
-
-        // 2. HIERARCHICAL CATEGORIES
         const catArray = this.safeJsonParse(sanitizedItem.categories || '[]', [])
         let currentParentId: number | null = null
 
@@ -63,13 +54,10 @@ export default class MainSeeder extends BaseSeeder {
           currentParentId = category.id
         }
 
-        // 3. PRODUCT CREATION
-        // ✅ SÉCURITÉ : .substring(0, 255) empêche l'erreur "value too long"
         const product = await Product.create(
           {
             title: (item.title || '').substring(0, 255),
             description: item.description,
-            // SÉCURITÉ : substring pour éviter le "value too long"
             modelNumber: (item.model_number || '').substring(0, 99),
             rating: this.safeParseFloat(item.rating),
             reviewsCount: this.safeParseInt(item.reviews_count),
@@ -78,7 +66,6 @@ export default class MainSeeder extends BaseSeeder {
             availability: (item.availability || '').substring(0, 99),
             isAvailable: item.availability === 'In Stock' || item.is_available === 'true',
 
-            // SÉCURITÉ : Date parsing blindé
             dateFirstAvailable: this.safeParseDate(item.date_first_available),
 
             url: (item.url || '').substring(0, 255),
@@ -90,21 +77,17 @@ export default class MainSeeder extends BaseSeeder {
           { client: trx }
         )
 
-        // 4. SATELLITE DATA
         await this.seedChildren(product, sanitizedItem, trx)
 
-        // 5. ATTACH CATEGORY
         if (currentParentId) {
           await product.related('categories').attach([currentParentId], trx)
         }
 
-        // ✅ SUCCÈS : On valide la transaction pour cet item
         await trx.commit()
         successCount++
 
         if (i % 10 === 0) console.log(`Processed item ${i + 1}/${data.length}`)
       } catch (itemError: any) {
-        // ❌ ÉCHEC : On annule seulement cet item
         await trx.rollback()
         errorCount++
         console.error(
@@ -122,7 +105,7 @@ export default class MainSeeder extends BaseSeeder {
       const parsed = DateTime.fromFormat(dateStr, 'MMMM d, yyyy')
       return parsed.isValid ? parsed : null
     } catch {
-      return null // Si format bizarre, on met null au lieu de faire planter le produit
+      return null
     }
   }
 
@@ -169,13 +152,13 @@ export default class MainSeeder extends BaseSeeder {
     return {
       ...item,
       title: this.sanitizeString(item.title, 255),
-      description: this.sanitizeString(item.description, 1000), // Allow longer for TEXT
-      url: this.sanitizeString(item.url, 500), // URLs can be long
+      description: this.sanitizeString(item.description, 1000),
+      url: this.sanitizeString(item.url, 500),
       imageUrl: this.sanitizeString(item.image_url, 500),
       brand: this.sanitizeString(item.brand),
       seller_name: this.sanitizeString(item.seller_name),
-      categories: item.categories, // Handled separately
-      features: item.features, // Handled separately
+      categories: item.categories,
+      features: item.features,
       rating: this.safeParseFloat(item.rating),
       reviews_count: this.safeParseInt(item.reviews_count),
       root_bs_rank: this.safeParseInt(item.root_bs_rank) || undefined,
@@ -186,7 +169,7 @@ export default class MainSeeder extends BaseSeeder {
   private sanitizeString(value: any, maxLength?: number): string | undefined {
     if (!value) return undefined
     const str = String(value).trim()
-    const sanitized = str.replace(/[^\x20-\x7E\xA0-\xFF]/g, '') // Keep printable ASCII and Latin-1
+    const sanitized = str.replace(/[^\x20-\x7E\xA0-\xFF]/g, '')
     return maxLength ? sanitized.substring(0, maxLength) : sanitized
   }
 

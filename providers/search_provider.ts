@@ -2,8 +2,8 @@ import type { ApplicationService } from '@adonisjs/core/types'
 import env from '#start/env'
 import { MeilisearchClient } from '#infrastructure/Search/meilisearch/meilisearch_client'
 import { SearchManager } from '#infrastructure/Search/search_manager'
-import { SearchInterface } from '#infrastructure/Search/search_interface'
-import { IndexerInterface } from '#infrastructure/Search/indexer_interface'
+import { SearchInterface } from '#infrastructure/Search/contracts/search_interface'
+import { IndexerInterface } from '#infrastructure/Search/contracts/indexer_interface'
 import { TypesenseClient } from '#infrastructure/Search/Typesense/typesense_client'
 
 export default class SearchProvider {
@@ -14,7 +14,7 @@ export default class SearchProvider {
 
     this.app.container.bind(SearchInterface, async () => {
       const manager = await this.app.container.make(SearchManager)
-      return manager.search()
+      return manager.register()
     })
 
     this.app.container.bind(IndexerInterface, async () => {

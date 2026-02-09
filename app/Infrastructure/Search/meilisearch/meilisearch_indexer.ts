@@ -1,5 +1,5 @@
 import { inject } from '@adonisjs/core'
-import { IndexerInterface } from '../indexer_interface.js'
+import { IndexerInterface } from '../contracts/indexer_interface.js'
 import { SearchDocument } from '../search_document.js'
 import { MeilisearchClient } from './meilisearch_client.js'
 import { MeilisearchException } from './meilisearch_exception.js'
@@ -16,7 +16,7 @@ export class MeilisearchIndexer implements IndexerInterface {
     this.settings()
   }
 
-  public async IndexSingleDocument(items: SearchDocument): Promise<void> {
+  public async indexSingleDocument(items: SearchDocument): Promise<void> {
     await this.client.patch(`indexes/${COLLECTION_SCHEMA['uid']}/documents/${items['id']}`, items)
   }
 
@@ -47,5 +47,9 @@ export class MeilisearchIndexer implements IndexerInterface {
         return
       }
     }
+  }
+
+  public async flush() {
+    return await this.client.deleteAll('/collections/content')
   }
 }

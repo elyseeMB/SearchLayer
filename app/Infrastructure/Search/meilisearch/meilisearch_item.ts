@@ -1,5 +1,5 @@
 import { POSTResponse } from 'types/global.js'
-import { SearchResultItemInterface } from '../search_resultItem_interface.js'
+import { SearchResultItemInterface } from '../contracts/search_result_item_interface.js'
 
 export class MeilisearchItem implements SearchResultItemInterface {
   constructor(private readonly item: POSTResponse['/search']['hits'][number]) {}

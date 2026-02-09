@@ -5,7 +5,7 @@ import { SearchManager } from '#infrastructure/Search/search_manager'
 import { SEARCH_ENGINE, TYPE_SEARCH } from '#enums/search'
 
 export default class DropAllItemIndexable extends BaseCommand {
-  static commandName = 'drop:all-item-indexable'
+  static commandName = 'flush:search'
   static description = ''
 
   static options: CommandOptions = {
@@ -14,24 +14,13 @@ export default class DropAllItemIndexable extends BaseCommand {
 
   @inject()
   async run(manager: SearchManager) {
-    const engine = manager.getEngine as TYPE_SEARCH
+    const engines = Object.values(SEARCH_ENGINE) as TYPE_SEARCH[]
 
-    const deleteAll = {
-      [SEARCH_ENGINE.TYPESENSE]: async () => {
-        const client = await manager.client(SEARCH_ENGINE.TYPESENSE)
-        const res = await client.deleteAll('/collections/content')
-        console.log(res)
-        this.logger.info(`Drop all item with ${SEARCH_ENGINE.TYPESENSE}`)
-      },
-
-      [SEARCH_ENGINE.MEILISEARCH]: async () => {
-        const client = await manager.client(SEARCH_ENGINE.MEILISEARCH)
-        const res = await client.deleteAll('/indexes/content')
-        console.log(res)
-        this.logger.info(`Drop all item with ${SEARCH_ENGINE.MEILISEARCH}`)
-      },
+    this.logger.info(`Starting...`)
+    for (const engine of engines) {
+      const indexer = await manager.indexer(engine)
+      await indexer.flush()
+      this.logger.success(`Delete completed ${engine}.`)
     }
-
-    await deleteAll[engine]()
   }
 }
