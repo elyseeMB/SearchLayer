@@ -11,23 +11,23 @@ import { SearchInterface } from './contracts/search_interface.js'
 import { IndexerInterface } from './contracts/indexer_interface.js'
 import { ClientHttpInterface } from './clientHttp_Interface.js'
 
+const registry = {
+  [SEARCH_ENGINE.TYPESENSE]: {
+    search: TypesenseSearch,
+    indexer: TypesenseIndexer,
+    client: TypesenseClient,
+  },
+  [SEARCH_ENGINE.MEILISEARCH]: {
+    search: MeilisearchSearch,
+    indexer: MeilisearchIndexer,
+    client: MeilisearchClient,
+  },
+}
+
 export class SearchManager {
   private searchDrivers: Map<TYPE_SEARCH, SearchInterface> = new Map()
   private indexerDrivers: Map<TYPE_SEARCH, IndexerInterface> = new Map()
   private clientDrivers: Map<TYPE_SEARCH, ClientHttpInterface> = new Map()
-
-  private readonly registry = {
-    [SEARCH_ENGINE.TYPESENSE]: {
-      search: TypesenseSearch,
-      indexer: TypesenseIndexer,
-      client: TypesenseClient,
-    },
-    [SEARCH_ENGINE.MEILISEARCH]: {
-      search: MeilisearchSearch,
-      indexer: MeilisearchIndexer,
-      client: MeilisearchClient,
-    },
-  }
 
   constructor(protected app: ApplicationService) {}
 
@@ -36,45 +36,39 @@ export class SearchManager {
   }
 
   public async client(name?: TYPE_SEARCH): Promise<ClientHttpInterface> {
-    const engine = name || this.getEngine
-    if (this.clientDrivers.has(engine)) {
-      return this.clientDrivers.get(engine)!
-    }
-
-    const client = await this.resolve<ClientHttpInterface>(engine, 'client')
-    this.clientDrivers.set(engine, client)
-    return client
+    return this.getDriver('client', this.clientDrivers, name)
   }
 
   public async register(name?: TYPE_SEARCH): Promise<SearchInterface> {
-    const engine = name || this.getEngine
-    if (this.searchDrivers.has(engine)) {
-      return this.searchDrivers.get(engine)!
-    }
-
-    const search = await this.resolve<SearchInterface>(engine, 'search')
-    this.searchDrivers.set(engine, search)
-    return search
+    return this.getDriver('search', this.searchDrivers, name)
   }
 
   public async indexer(name?: TYPE_SEARCH): Promise<IndexerInterface> {
+    return this.getDriver('indexer', this.indexerDrivers, name)
+  }
+
+  private async getDriver<T>(
+    type: 'search' | 'indexer' | 'client',
+    cache: Map<TYPE_SEARCH, T>,
+    name?: TYPE_SEARCH
+  ): Promise<T> {
     const engine = name || this.getEngine
-    if (this.indexerDrivers.has(engine)) {
-      return this.indexerDrivers.get(engine)!
+
+    if (cache.has(engine)) {
+      return cache.get(engine)!
     }
 
-    const indexer = await this.resolve<IndexerInterface>(engine, 'indexer')
-    this.indexerDrivers.set(engine, indexer)
-    return indexer
+    const driver = await this.resolve<T>(engine, type)
+    cache.set(engine, driver)
+    return driver
   }
 
   private async resolve<T>(engine: TYPE_SEARCH, type: 'search' | 'indexer' | 'client'): Promise<T> {
-    const config = this.registry[engine]
+    const config = registry[engine]
 
     if (!config) {
       throw new Error(`${type} for "${engine}" not implemented`)
     }
-
     return (await this.app.container.make(config[type])) as T
   }
 }
