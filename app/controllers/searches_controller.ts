@@ -1,7 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
-import { SearchManager } from '../../src/Infrastructure/Search/search_manager.js'
 import { SEARCH_ENGINE } from '#enums/search'
+import { SearchManager } from '#infrastructure/Search/search_manager'
 
 export default class SearchesController {
   @inject()

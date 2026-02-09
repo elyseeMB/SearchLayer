@@ -16,7 +16,7 @@
   "imports": {
     "#helpers/*": "./helpers/*.js",
     "#enums/*": "./app/enums/*.js",
-    "#infrastructure/*": "./src/Infrastructure/*.js",
+    "#infrastructure/*": "./app/Infrastructure/*.js",
     "#controllers/*": "./app/controllers/*.js",
     "#exceptions/*": "./app/exceptions/*.js",
     "#usecase/*": "./app/usecase/*.js",

@@ -7,14 +7,14 @@ import { IndexerInterface } from './indexer_interface.js'
 import { SEARCH_ENGINE, TYPE_SEARCH } from '#enums/search'
 import { MeilisearchIndexer } from './meilisearch/meilisearch_indexer.js'
 import { MeilisearchSearch } from './meilisearch/meilisearch_search.js'
-import { clientInterface } from './clientHttp_Interface.js'
 import { TypesenseClient } from './Typesense/typesense_client.js'
 import { MeilisearchClient } from './meilisearch/meilisearch_client.js'
+import { ClientHttpInterface } from './clientHttp_Interface.js'
 
 export class SearchManager {
   private searchDrivers: Map<TYPE_SEARCH, SearchInterface> = new Map()
   private indexerDrivers: Map<TYPE_SEARCH, IndexerInterface> = new Map()
-  private clientDrivers: Map<TYPE_SEARCH, clientInterface> = new Map()
+  private clientDrivers: Map<TYPE_SEARCH, ClientHttpInterface> = new Map()
 
   constructor(protected app: ApplicationService) {}
 
@@ -25,7 +25,7 @@ export class SearchManager {
   /**
    * client
    */
-  public async client(name?: TYPE_SEARCH): Promise<clientInterface> {
+  public async client(name?: TYPE_SEARCH): Promise<ClientHttpInterface> {
     const engine = name || (env.get('SEARCH_ENGINE') as TYPE_SEARCH)
     if (this.clientDrivers.has(engine)) return this.clientDrivers.get(engine)!
 
