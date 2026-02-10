@@ -1,10 +1,11 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { SearchInterface } from '../../src/Infrastructure/Search/search_interface.js'
 import { inject } from '@adonisjs/core'
+import { SEARCH_ENGINE } from '#enums/search'
+import { SearchManager } from '#infrastructure/Search/search_manager'
 
 export default class SearchesController {
   @inject()
-  async handle({ response, request }: HttpContext, search: SearchInterface) {
+  async handle({ response, request }: HttpContext, manager: SearchManager) {
     const q = request.qs().q ?? ''
     const redirect = request.qs().redirect ?? '1'
 
@@ -14,8 +15,15 @@ export default class SearchesController {
       console.log('==========================')
     }
 
-    const results = await search.search(q)
+    const searchTypesense = await manager.register(SEARCH_ENGINE.TYPESENSE)
+    const searchMeilisearch = await manager.register(SEARCH_ENGINE.MEILISEARCH)
 
-    return response.json(results.getItems())
+    const resultsTypesense = await searchTypesense.search(q)
+    const resultsMeilisearch = await searchMeilisearch.search(q)
+
+    return response.json({
+      typesense: resultsTypesense,
+      meilisearch: resultsMeilisearch,
+    })
   }
 }

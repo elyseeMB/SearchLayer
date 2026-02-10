@@ -44,4 +44,24 @@ export default await Env.create(new URL('../', import.meta.url), {
   */
   TYPESENSE_HOST: Env.schema.string(),
   TYPESENSE_KEY: Env.schema.string(),
+
+  /*
+
+
+  
+  /*
+  |----------------------------------------------------------
+  | Variables for configuring Typesense
+  |----------------------------------------------------------
+  */
+  MEILISEARCH_HOST: Env.schema.string(),
+  MEILISEARCH_KEY: Env.schema.string(),
+
+  /*
+
+  |----------------------------------------------------------
+  | search config
+  |----------------------------------------------------------
+  */
+  SEARCH_ENGINE: Env.schema.string(),
 })

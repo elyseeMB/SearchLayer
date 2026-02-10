@@ -1,5 +1,6 @@
 {
   "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
@@ -23,10 +24,9 @@
     "types": ["svelte", "vite/client"],
     "strictPropertyInitialization": false,
 
-
   },
 
 
-  "include": ["assets/**/*.ts", "assets/**/*.js", "assets/**/*.svelte"],
+  "include": ["assets"],
   "exclude": [ "node_modules", "build"]
 }

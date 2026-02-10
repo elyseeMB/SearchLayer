@@ -1,20 +1,29 @@
 <script lang="ts">
-	import type { HTMLAttributes } from "svelte/elements";
-	import { cn, type WithElementRef } from "@/lib/utils.js";
+  import type { HTMLAttributes } from 'svelte/elements'
+  import { cn, type WithElementRef } from '@/lib/utils.js'
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		children,
-		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
+  interface Props extends WithElementRef<HTMLAttributes<HTMLDivElement>> {
+    innerHTML?: HTMLElement
+  }
+
+  let {
+    ref = $bindable(null),
+    class: className,
+    children,
+    innerHTML = $bindable(),
+    ...restProps
+  }: Props = $props()
 </script>
 
 <div
-	bind:this={ref}
-	data-slot="card-title"
-	class={cn("leading-none font-semibold", className)}
-	{...restProps}
+  bind:this={ref}
+  bind:innerHTML
+  data-slot="card-title"
+  contenteditable="true"
+  class={cn('leading-none font-semibold', className)}
+  {...restProps}
 >
-	{@render children?.()}
+  {#if !innerHTML}
+    {@render children?.()}
+  {/if}
 </div>

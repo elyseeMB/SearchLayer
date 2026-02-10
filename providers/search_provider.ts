@@ -1,21 +1,26 @@
 import type { ApplicationService } from '@adonisjs/core/types'
 import env from '#start/env'
-import { SearchInterface } from '../src/Infrastructure/Search/search_interface.js'
-import { TypesenseSearch } from '../src/Infrastructure/Search/Typesense/typesense_search.js'
-import { TypesenseClient } from '../src/Infrastructure/Search/Typesense/typesense_client.js'
-import { IndexerInterface } from '../src/Infrastructure/Search/indexer_interface.js'
-import { TypesenseIndexer } from '../src/Infrastructure/Search/Typesense/typesense_indexer.js'
+import { MeilisearchClient } from '#infrastructure/Search/meilisearch/meilisearch_client'
+import { SearchManager } from '#infrastructure/Search/search_manager'
+import { SearchInterface } from '#infrastructure/Search/search_interface'
+import { IndexerInterface } from '#infrastructure/Search/indexer_interface'
+import { TypesenseClient } from '#infrastructure/Search/Typesense/typesense_client'
 
 export default class SearchProvider {
   constructor(protected app: ApplicationService) {}
 
-  /**
-   * Register bindings to the container
-   */
   register() {
-    this.app.container.bind(SearchInterface, () => this.app.container.make(TypesenseSearch))
+    this.app.container.singleton(SearchManager, () => new SearchManager(this.app))
 
-    this.app.container.bind(IndexerInterface, () => this.app.container.make(TypesenseIndexer))
+    this.app.container.bind(SearchInterface, async () => {
+      const manager = await this.app.container.make(SearchManager)
+      return manager.register()
+    })
+
+    this.app.container.bind(IndexerInterface, async () => {
+      const manager = await this.app.container.make(SearchManager)
+      return manager.indexer()
+    })
   }
 
   /**
@@ -26,6 +31,12 @@ export default class SearchProvider {
       const host = env.get('TYPESENSE_HOST')
       const apiKey = env.get('TYPESENSE_KEY')
       return new TypesenseClient(host, apiKey)
+    })
+
+    this.app.container.bind(MeilisearchClient, () => {
+      const host = env.get('MEILISEARCH_HOST')
+      const apiKey = env.get('MEILISEARCH_KEY')
+      return new MeilisearchClient(host, apiKey)
     })
   }
 
